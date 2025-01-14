@@ -1,0 +1,110 @@
+CISC/CMPE 454 Assignment 1
+
+Due Friday, January 24 at noon
+
+Your job is to build a Missile Command game.  Skeleton code has been
+provided in this directory.  You may work singly or in pairs.
+
+Compile the code:
+
+   On Linux:
+
+     Open a terminal window.
+     cd a1/linux
+     make
+
+   On MacOS:
+
+     Open a Terminal window.
+     cd a1/macos
+     cat README.txt
+     make
+
+   On Windows with Visual Studio:
+
+     From the File Explorer, open the a1/windows/mc.vcxproj file.  DO
+     NOT OPEN THIS FILE FROM WITHIN VISUAL STUDIO.  Visual Studio
+     *CODE* is not supported; do not use it.  Only Visual Studio is
+     supported.
+
+Modify the code as follows:
+
+1. In World::handleKeystroke(), calculate the 'worldMousePosition' from 
+   the screenspace (x,y) mouse position.
+
+2. Modify World::fireMissile() to create the correct missile, based
+   upon the target (x,y) position.
+
+3. Modify Missile::hasReachedDestination() to return the correct
+   value.  Do not allow firing from empty or destroyed silos.  The
+   'Missile' constructor takes a position, velocity, destination y
+   value, and colour.
+
+4. Modify Silo::draw() and City::draw() so that the set of vertices in
+   the 'points' array DOES NOT CHANGE with the position of the silo or
+   city.  You will have to include another transformation with the 'M'
+   matrix for the silo or city to be drawn in the correct position.
+
+5. Modify World::updateState() to
+
+    5a. Generate a new missile with probability that increases with
+        time, and is randomly aimed at somewhere on the ground.  Add
+        the new missile to 'missilesIn' using the Missile constructor.
+
+    5b. Add explosions for missiles (both incoming and outgoing)
+        that have reached their desitinations.
+
+    5c. Check for destroyed cities or silos, and deactivate them.
+
+    5d. Check for the destruction of an incoming missile, and remove
+        such missile from the missilesIn list.  Use
+        "missilesIn.remove(j)" to remove missile j.
+
+6. Modify Missile::move() to make the missile follow a parabolic
+   trajectory, getting steeper with time.  Modify Missile::draw() to
+   draw the missile as a stylized tube that has its long axis parallel
+   to the direction of flight.  The orientation of the missile will
+   change with time.  As in Step 4, do not change the vertices of the
+   missile tube with orientation; instead, include transformations
+   with the 'M' matrix to position and orient the missile tube.
+
+7. Add one novel feature from the list below:
+
+    - Have the explosion contract after reaching its maximum diameter.
+
+    - Fade the explosion colour toward the edges.
+
+    - Draw more interesting cities and silos (perhaps with a city-like
+      skyline.  Draw destroyed cities differently.
+
+    - Display text to show, within each silo itself, the remaining
+      numbers of missiles of that each silo, and display text to show
+      a score (you choose the scoring).
+ 
+    - If you want to do something else, get approval from the
+      instructor.
+
+7. Make a NEW DIRECTORY called 'a1' and copy the following into that
+   NEW DIRECTORY:
+
+     *.cpp         ALL .cpp files from src/, but nothing from src/glad/
+     
+     *.h           ALL .h files from src/, but nothing from src/glad/
+
+     README.txt    a file that (a) lists the NAME and NETID of
+                   you and any partner with whom you worked and (b)
+                   describes the two novel features that you made in
+                   part 7.
+
+     feature.png   an image in PNG format showing your novel feature
+
+   Zip the 'a1' directory into a file named 'a1.zip'.  Submit it on OnQ.
+
+YOU WILL LOSE MARKS if your archive is not a 'zip' or if you include
+extra files or if everything is not in a directory called 'a1' or if
+'a1' has subdirectories.  In particular: on Windows, do not include
+the Debug or Release or x64 directories or the hidden ".vs" directory;
+on OSX, do not include the hidden "__MACOSX" directory.  Verify that
+your archive does not have extra files AFTER YOUR HAVE BUILT THE
+ARCHIVE.
+
