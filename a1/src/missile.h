@@ -59,6 +59,17 @@ class Missile {
     // YOUR CODE HERE (Step 3)
     // something with checking it's current position versus something else
 
+    // if the missle is going downwards (dir is negative)
+    // check if the current y coord is greater than the destY, other we've hit it
+    if (velocity.y < 0)
+    {
+        return (pos1.y <= destY);
+    }
+    else if (velocity.y > 0)
+    {
+        return (pos1.y >= destY);
+    }
+
     return false;
   }
 

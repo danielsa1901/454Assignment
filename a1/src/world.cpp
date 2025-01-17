@@ -9,6 +9,10 @@
 #define BORDER  0.05                      // border on screen inside which world is drawn
 
 #define INIT_OUTGOING_MISSILE_SPEED 0.7   // world units per second
+#define INIT_INCOMING_MISSILE_SPEED 0.1   // have the incoming missle be slower
+#define MAX_TIME 2000
+#define EXPLOSION_RADIUS 0.03
+#define EXPLOSION_SPEED 0.05
 
 
 
@@ -58,8 +62,9 @@ void World::handleKeystroke( int key, float x, float y )
   // YOUR CODE HERE (Step 1)
   // From the main file (mc.cpp), they already get converted to 'Screen coords' before being passed to us
   // Use the inverse matrix function from the linalg library and apply it to
-  mat4 inverseWorldToScreen = worldToScreen.inverse();
-  vec3 worldMousePos = vec3( 0.5, 0.5, 0 );
+  vec4 mousePosVec4 = vec4(x, y, 0, 1);
+  mousePosVec4 = worldToScreen.inverse() * mousePosVec4;
+  vec3 worldMousePos = vec3(mousePosVec4.x, mousePosVec4.y, mousePosVec4.z);
 
   // Handle key press
     
@@ -120,22 +125,57 @@ void World::updateState( float deltaT )
   //
   // YOUR CODE HERE (Step 5a)
 
+  // Define a probability which is compared to an arbitrary maximum runtime
+  // where the probability will slowly increase over time, maxing out at 100%
+  float probability = currentTime / MAX_TIME;
 
+  cout << probability << endl;
+
+  // clamp probability to 1 (100%)
+  if (probability > 1.0f)
+      probability = 1.0f;
+
+  // generate a rand number between 0 and 1
+  float randomValue = static_cast<float>(std::rand()) / RAND_MAX;
+
+  cout << randomValue << endl;
+
+  bool fireIncoming = randomValue <= probability;
+
+  // make a new random number for the missle starting x position
+  // we need a different rand number or else all the incoming missle positions
+  // will be gated by the probability number
+  if (fireIncoming)
+  {
+      vec3 startPos = vec3(static_cast<float>(std::rand()) / RAND_MAX, worldTop, 0);
+      vec3 target = vec3(static_cast<float>(std::rand()) / RAND_MAX, 0, 0);
+
+      vec3 direction = vec3(target - startPos).normalize();
+      vec3 colour = vec3(255, 255, 0);
+
+      missilesIn.add(Missile(startPos, INIT_INCOMING_MISSILE_SPEED * direction, target.y, colour));
+  }
 
   // Look for terminating missiles
   
   for (int i=0; i<missilesIn.size(); i++)
     if (missilesIn[i].hasReachedDestination()) {
-    
       // YOUR CODE HERE (Step 5b)
-      
+      vec3 colour = vec3(255, 255, 0);
+      explosions.add(Circle(missilesIn[i].position(), EXPLOSION_SPEED, EXPLOSION_RADIUS, colour, false));
+      //draw a circle where the missle current is
+      // remove missile that hit target
+      missilesIn.remove(i);
     }
 
   for (int i=0; i<missilesOut.size(); i++)
     if (missilesOut[i].hasReachedDestination()) {
-    
       // YOUR CODE HERE (Step 5b)
-      
+      vec3 colour = vec3(1, 0, 0);
+      explosions.add(Circle(missilesOut[i].position(), EXPLOSION_SPEED, EXPLOSION_RADIUS, colour, false));
+      //draw a circle where the missle current is
+      // remove missile that hit target
+      missilesOut.remove(i);
     }
 
   // Look for terminating explosions
@@ -188,6 +228,22 @@ void World::fireMissile( int siloIndex, vec3 worldMousePos )
 {
   // YOUR CODE HERE (Step 2)
   // Create a missle based open the siloindex (where it's being fired from, 0->Left, 1->Middle, 2->Right), and the Mouse position (where the missile is going)
+  // Find the position of the silo
+
+    if (silos[siloIndex].canShoot())
+    {
+        vec3 siloPos = silos[siloIndex].position();
+
+        // Find the direction of the missile
+        vec3 direction = worldMousePos - siloPos;
+
+        direction = direction.normalize();
+
+        vec3 missleColour = vec3(1, 0, 0);
+
+        // Draw the missle
+        missilesOut.add(Missile(siloPos, INIT_OUTGOING_MISSILE_SPEED * direction, worldMousePos.y, missleColour));
+    }
 }
 
 

@@ -32,11 +32,12 @@ class City {
     
     const int numPts = 4;
 
-    vec3 points[ numPts ] = {
-      vec3( pos.x + CITY_WIDTH, pos.y,               0 ),
-      vec3( pos.x + CITY_WIDTH, pos.y + CITY_HEIGHT, 0 ),
-      vec3( pos.x - CITY_WIDTH, pos.y + CITY_HEIGHT, 0 ),
-      vec3( pos.x - CITY_WIDTH, pos.y,               0 ) };
+    vec3 points[numPts] = {
+      vec3(1, 0, 0), // Relative coordinates (scaled by CITY_WIDTH and CITY_HEIGHT)
+      vec3(1, 1, 0),
+      vec3(-1, 1, 0),
+      vec3(-1, 0, 0)
+        };
       
     vec3 colours[ numPts ] = {
       vec3(1,1,1),
@@ -44,7 +45,7 @@ class City {
       vec3(1,1,1),
       vec3(1,1,1) };
 
-    mat4 M = worldToScreen;
+    mat4 M = worldToScreen * translate(pos) * scale(CITY_WIDTH, CITY_HEIGHT, 1);
     
     drawSegs( gpu, GL_LINE_LOOP, points, colours, numPts, M );
   }
