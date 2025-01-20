@@ -129,16 +129,12 @@ void World::updateState( float deltaT )
   // where the probability will slowly increase over time, maxing out at 100%
   float probability = currentTime / MAX_TIME;
 
-  cout << probability << endl;
-
   // clamp probability to 1 (100%)
   if (probability > 1.0f)
       probability = 1.0f;
 
   // generate a rand number between 0 and 1
   float randomValue = static_cast<float>(std::rand()) / RAND_MAX;
-
-  cout << randomValue << endl;
 
   bool fireIncoming = randomValue <= probability;
 

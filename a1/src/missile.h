@@ -8,6 +8,10 @@
 #include "gpuProgram.h"
 #include "drawSegs.h"
 
+#define INCOMING_MISSLE_COLOUR vec3(255, 255, 0)
+#define OUTGOING_MISSILE_COLOUR vec3(1, 0, 0)
+#define Y_TOLERANCE 0.1
+
 
 class Missile {
  public:
@@ -22,6 +26,7 @@ class Missile {
     velocity = initVelocity;
     colour = _colour;
     destY = stopAtY;
+    currentTime = 0;
   }
 
   // Draw the missile and its trail
@@ -44,6 +49,10 @@ class Missile {
     pos1 = pos1 + deltaT * velocity;
 
     // YOUR CODE HERE (Step 6)
+    currentTime += deltaT;
+
+    if (this->colour == OUTGOING_MISSILE_COLOUR)
+        pos1 = pos1 + currentTime * currentTime * 0.5 * (vec3(0, -0.005, 0));
   }
 
   // Return the current position 
@@ -61,14 +70,17 @@ class Missile {
 
     // if the missle is going downwards (dir is negative)
     // check if the current y coord is greater than the destY, other we've hit it
-    if (velocity.y < 0)
-    {
-        return (pos1.y <= destY);
-    }
-    else if (velocity.y > 0)
-    {
-        return (pos1.y >= destY);
-    }
+      cout << "posy: " << pos1.y << endl;
+      if (pos1.y < 0 || pos1.x > 1 || pos1.x < 0)
+          return true;
+      else if (velocity.y < 0)
+      {
+          return (pos1.y <= destY);
+      }
+      else if (velocity.y > 0)
+      {
+          return (pos1.y >= destY);
+      }
 
     return false;
   }
@@ -80,6 +92,7 @@ class Missile {
   vec3 velocity;   // velocity
   vec3 colour;     // colour of missile trail
   float destY;     // y position at destination
+  float currentTime; // Used for velocity calculations
 };
 
 
