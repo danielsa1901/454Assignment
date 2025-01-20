@@ -1,0 +1,132 @@
+{
+  "Version": 1,
+  "WorkspaceRootPath": "C:\\Users\\aaron\\454 A1\\454Assignment\\a1\\windows\\",
+  "Documents": [
+    {
+      "AbsoluteMoniker": "D:0:0:{71457ADC-EFCD-4D13-AF48-B42718667B63}|mc.vcxproj|C:\\Users\\aaron\\454 A1\\454Assignment\\a1\\src\\world.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{71457ADC-EFCD-4D13-AF48-B42718667B63}|mc.vcxproj|C:\\Users\\aaron\\454 A1\\454Assignment\\a1\\src\\circle.h||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{71457ADC-EFCD-4D13-AF48-B42718667B63}|mc.vcxproj|C:\\Users\\aaron\\454 A1\\454Assignment\\a1\\src\\silo.h||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{71457ADC-EFCD-4D13-AF48-B42718667B63}|mc.vcxproj|C:\\Users\\aaron\\454 A1\\454Assignment\\a1\\src\\city.h||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{71457ADC-EFCD-4D13-AF48-B42718667B63}|mc.vcxproj|C:\\Users\\aaron\\454 A1\\454Assignment\\a1\\src\\missile.h||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{71457ADC-EFCD-4D13-AF48-B42718667B63}|mc.vcxproj|C:\\Users\\aaron\\454 A1\\454Assignment\\a1\\src\\linalg.h||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{71457ADC-EFCD-4D13-AF48-B42718667B63}|mc.vcxproj|C:\\Users\\aaron\\454 A1\\454Assignment\\a1\\src\\mc.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
+    }
+  ],
+  "DocumentGroupContainers": [
+    {
+      "Orientation": 0,
+      "VerticalTabListWidth": 256,
+      "DocumentGroups": [
+        {
+          "DockedWidth": 200,
+          "SelectedChildIndex": 4,
+          "Children": [
+            {
+              "$type": "Document",
+              "DocumentIndex": 3,
+              "Title": "city.h",
+              "DocumentMoniker": "C:\\Users\\aaron\\454 A1\\454Assignment\\a1\\src\\city.h",
+              "RelativeDocumentMoniker": "..\\src\\city.h",
+              "ToolTip": "C:\\Users\\aaron\\454 A1\\454Assignment\\a1\\src\\city.h",
+              "RelativeToolTip": "..\\src\\city.h",
+              "ViewState": "AgIAACQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000680|",
+              "WhenOpened": "2025-01-20T17:04:38.041Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 5,
+              "Title": "linalg.h",
+              "DocumentMoniker": "C:\\Users\\aaron\\454 A1\\454Assignment\\a1\\src\\linalg.h",
+              "RelativeDocumentMoniker": "..\\src\\linalg.h",
+              "ToolTip": "C:\\Users\\aaron\\454 A1\\454Assignment\\a1\\src\\linalg.h",
+              "RelativeToolTip": "..\\src\\linalg.h",
+              "ViewState": "AgIAAPMAAAAAAAAAAAAAAHkAAAAdAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000680|",
+              "WhenOpened": "2025-01-20T16:47:10.129Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 2,
+              "Title": "silo.h",
+              "DocumentMoniker": "C:\\Users\\aaron\\454 A1\\454Assignment\\a1\\src\\silo.h",
+              "RelativeDocumentMoniker": "..\\src\\silo.h",
+              "ToolTip": "C:\\Users\\aaron\\454 A1\\454Assignment\\a1\\src\\silo.h",
+              "RelativeToolTip": "..\\src\\silo.h",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000680|",
+              "WhenOpened": "2025-01-20T16:40:34.517Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 1,
+              "Title": "circle.h",
+              "DocumentMoniker": "C:\\Users\\aaron\\454 A1\\454Assignment\\a1\\src\\circle.h",
+              "RelativeDocumentMoniker": "..\\src\\circle.h",
+              "ToolTip": "C:\\Users\\aaron\\454 A1\\454Assignment\\a1\\src\\circle.h",
+              "RelativeToolTip": "..\\src\\circle.h",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAABIAAAACAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000680|",
+              "WhenOpened": "2025-01-20T16:36:34.58Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 0,
+              "Title": "world.cpp",
+              "DocumentMoniker": "C:\\Users\\aaron\\454 A1\\454Assignment\\a1\\src\\world.cpp",
+              "RelativeDocumentMoniker": "..\\src\\world.cpp",
+              "ToolTip": "C:\\Users\\aaron\\454 A1\\454Assignment\\a1\\src\\world.cpp",
+              "RelativeToolTip": "..\\src\\world.cpp",
+              "ViewState": "AgIAADMAAAAAAAAAAAAAAOQAAAAdAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000677|",
+              "WhenOpened": "2025-01-20T16:32:32.964Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 4,
+              "Title": "missile.h",
+              "DocumentMoniker": "C:\\Users\\aaron\\454 A1\\454Assignment\\a1\\src\\missile.h",
+              "RelativeDocumentMoniker": "..\\src\\missile.h",
+              "ToolTip": "C:\\Users\\aaron\\454 A1\\454Assignment\\a1\\src\\missile.h",
+              "RelativeToolTip": "..\\src\\missile.h",
+              "ViewState": "AgIAAAkAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000680|",
+              "WhenOpened": "2025-01-20T16:32:17.746Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 6,
+              "Title": "mc.cpp",
+              "DocumentMoniker": "C:\\Users\\aaron\\454 A1\\454Assignment\\a1\\src\\mc.cpp",
+              "RelativeDocumentMoniker": "..\\src\\mc.cpp",
+              "ToolTip": "C:\\Users\\aaron\\454 A1\\454Assignment\\a1\\src\\mc.cpp",
+              "RelativeToolTip": "..\\src\\mc.cpp",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000677|",
+              "WhenOpened": "2025-01-20T16:32:15.524Z",
+              "EditorCaption": ""
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

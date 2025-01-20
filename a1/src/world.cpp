@@ -172,7 +172,7 @@ void World::updateState( float deltaT )
     if (missilesOut[i].hasReachedDestination()) {
       // YOUR CODE HERE (Step 5b)
       vec3 colour = vec3(1, 0, 0);
-      explosions.add(Circle(missilesOut[i].position(), EXPLOSION_SPEED, EXPLOSION_RADIUS, colour, false));
+      explosions.add(Circle(missilesOut[i].position(), EXPLOSION_SPEED, EXPLOSION_RADIUS, colour, true));
       //draw a circle where the missle current is
       // remove missile that hit target
       missilesOut.remove(i);
@@ -201,15 +201,39 @@ void World::updateState( float deltaT )
   //
   // YOUR CODE HERE (Step 5c)
 
+  // Only incoming missle explosions can destroy silos and cities
+  for (int i = 0; i < explosions.size(); i++) {
+      if (!explosions[i].isOutgoingMissile()) {
+
+		  // Check if the explosion is within the radius of the silo, if so, deactivate the silo
+          for (int j = 0; j < silos.size(); j++) {
+              if ((explosions[i].position() - silos[j].position()).length() <= SILO_RADIUS + explosions[i].radius()) {
+
+                  silos[j].deactivate();
+              }
+          }
+		  // Check if the explosion is within the radius of the city, if so, deactivate the city
+		  // Because incoming explosions only occur at the bottom of the screen, we can just check the bottom cities using the city width.
+           for (int j = 0; j < cities.size(); j++) {
+               if ((explosions[i].position() - cities[j].position()).length() <= CITY_WIDTH + explosions[i].radius()) {
+                   cities[j].deactivate();
+                   citiesLeftAlive--;
+               }
+           }
+	  }
+  }
 
   // Check for outgoing missiles that have exploded and intersect an
   // incoming missile
 
+  // YOUR CODE HERE (Step 5d)
   for (int i=0; i<explosions.size(); i++) 
     if (explosions[i].isOutgoingMissile()) {
-
-      // YOUR CODE HERE (Step 5d)
-      
+		for (int j = 0; j < missilesIn.size(); j++) {
+			if ((explosions[i].position() - missilesIn[j].position()).length() <= EXPLOSION_RADIUS) {
+				missilesIn.remove(j);
+			}
+		}
     }
 
   // Check for advancing to next round (e.g. when a certain number of
