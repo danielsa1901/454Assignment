@@ -176,11 +176,24 @@ void World::updateState( float deltaT )
 
   // Look for terminating explosions
 
-  for (int i=0; i<explosions.size(); i++)
-    if (explosions[i].radius() >= explosions[i].maxRadius()) {
-      explosions.remove(i);
-      i--;
-    }
+  for (int i = 0; i < explosions.size(); i++) {
+      if (explosions[i].radius() >= explosions[i].maxRadius()) {
+          explosions.remove(i);
+          i--;
+      }
+      else if (explosions[i].radius() >= explosions[i].maxRadius()*0.75) {
+		  explosions[i].setColour(vec3(255, 0, 0));
+      }
+      else if (explosions[i].radius() >= explosions[i].maxRadius() * 0.5) {
+          explosions[i].setColour(vec3(255, 165, 0));
+      }
+      else if (explosions[i].radius() >= explosions[i].maxRadius() * 0.25) {
+          explosions[i].setColour(vec3(255, 255, 0));
+      }
+      else {
+          explosions[i].setColour(vec3(255, 255, 255));
+      }
+  }
 
   // Update all the moving objects
 

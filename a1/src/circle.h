@@ -69,6 +69,10 @@ class Circle {
     return isOutgoing;
   }
 
+  void setColour(vec3 c) {
+	  colour = c;
+  }
+
  private:
 
   vec3  pos;			// centre
