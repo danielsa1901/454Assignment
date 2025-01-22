@@ -70,7 +70,6 @@ class Missile {
 
     // if the missle is going downwards (dir is negative)
     // check if the current y coord is greater than the destY, other we've hit it
-      cout << "posy: " << pos1.y << endl;
       if (pos1.y < 0 || pos1.x > 1 || pos1.x < 0)
           return true;
       else if (velocity.y < 0)

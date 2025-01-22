@@ -48,6 +48,14 @@ void World::draw()
 
   sprintf( buffer, "MISSILE COMMAND" );
   strokeFont->drawStrokeString( buffer, 0, 0.85, 0.07, 0, CENTRE, vec3(0.2,0.7,0.5) );
+
+  // Draw text for silo missile count
+  for (int i = 0; i < silos.size(); i++)
+  {
+      sprintf(buffer, "%d", silos[i].missileCount());
+      vec4 siloScreenPos = worldToScreen * vec4(silos[i].position());
+      strokeFont->drawStrokeString(buffer, siloScreenPos.x, siloScreenPos.y + SILO_RADIUS/2, 0.07, 0, CENTRE, vec3(0.2, 0.7, 0.5));
+  }
 }
 
 
@@ -263,6 +271,9 @@ void World::fireMissile( int siloIndex, vec3 worldMousePos )
 
         // Draw the missle
         missilesOut.add(Missile(siloPos, INIT_OUTGOING_MISSILE_SPEED * direction, worldMousePos.y, missleColour));
+
+        // Decrement the missile count from the given silo
+        silos[siloIndex].decrMissiles();
     }
 }
 
