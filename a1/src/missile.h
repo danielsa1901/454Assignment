@@ -10,7 +10,7 @@
 
 #define INCOMING_MISSLE_COLOUR vec3(255, 255, 0)
 #define OUTGOING_MISSILE_COLOUR vec3(1, 0, 0)
-#define Y_TOLERANCE 0.1
+#define MISSILE_SCALE 0.008
 
 
 class Missile {
@@ -41,6 +41,45 @@ class Missile {
     mat4 M = worldToScreen;
     
     drawSegs( gpu, GL_LINES, points, colours, numPts, M );
+
+    // define missile shape
+    const int missilePts = 5;
+
+    vec3 missilePoints[missilePts] = {
+        vec3(-1, -1, 0), //bottom left
+        vec3(1, -1, 0), //bottom right
+        vec3(-1, 1, 0), //top left
+        vec3(1, 1, 0), //top right
+        vec3(0, 2, 0) //triangle top
+    };
+
+    const int shapePoints = 9;
+
+    vec3 missileTriangles[shapePoints] = {
+        missilePoints[0], missilePoints[1], missilePoints[2], // Triangle 1: bottom left, bottom right, top left
+        missilePoints[2], missilePoints[1], missilePoints[3], // Triangle 2: top left, bottom right, top right
+        missilePoints[2], missilePoints[3], missilePoints[4], // Triangle 1: top left, top right, triangle top
+    };
+
+    vec3 missileColours[shapePoints] = {
+        colour,
+        colour,
+        colour,
+        colour,
+        colour,
+        colour,
+        colour,
+        colour,
+        colour
+    };
+
+    vec3 xAxis = vec3(0, 1, 0);
+    vec3 direction = pos1 - pos0;
+
+    // We convert to screen coords last, we need to scale, rotate, and translate it first
+    mat4 M2 = worldToScreen * translate(pos1) * rotate(xAxis, direction) * scale(MISSILE_SCALE, MISSILE_SCALE, MISSILE_SCALE);
+
+    drawSegs(gpu, GL_TRIANGLES, missileTriangles, missileColours, 9, M2);
   }
 
   // Move the missile over a time interval, deltaT
@@ -53,6 +92,11 @@ class Missile {
 
     if (this->colour == OUTGOING_MISSILE_COLOUR)
         pos1 = pos1 + currentTime * currentTime * 0.5 * (vec3(0, -0.005, 0));
+    else if (this->colour == INCOMING_MISSLE_COLOUR) {
+        // significantly reduce the gravity effect for incoming missiles to prevent them from reaching too high of a speed
+        // while still allowing them to follow a parabolic trajectory
+        pos1 = pos1 + currentTime * currentTime * 0.01 * (vec3(0, -0.005, 0));
+    }
   }
 
   // Return the current position 

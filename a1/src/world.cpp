@@ -52,9 +52,12 @@ void World::draw()
   // Draw text for silo missile count
   for (int i = 0; i < silos.size(); i++)
   {
-      sprintf(buffer, "%d", silos[i].missileCount());
-      vec4 siloScreenPos = worldToScreen * vec4(silos[i].position());
-      strokeFont->drawStrokeString(buffer, siloScreenPos.x, siloScreenPos.y + SILO_RADIUS/2, 0.07, 0, CENTRE, vec3(0.2, 0.7, 0.5));
+      if (silos[i].isAlive())
+      {
+          sprintf(buffer, "%d", silos[i].missileCount());
+          vec4 siloScreenPos = worldToScreen * vec4(silos[i].position());
+          strokeFont->drawStrokeString(buffer, siloScreenPos.x, siloScreenPos.y + SILO_RADIUS / 2, 0.07, 0, CENTRE, vec3(0.2, 0.7, 0.5));
+      }
   }
 }
 
