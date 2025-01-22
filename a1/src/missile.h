@@ -11,6 +11,7 @@
 #define INCOMING_MISSLE_COLOUR vec3(255, 255, 0)
 #define OUTGOING_MISSILE_COLOUR vec3(1, 0, 0)
 #define MISSILE_SCALE 0.008
+#define MISSILE_TRAIL_LIMIT 30
 
 
 class Missile {
@@ -20,13 +21,18 @@ class Missile {
 
   Missile() {}
 
-  Missile( vec3 initPosition, vec3 initVelocity, float stopAtY, vec3 _colour ) {
+  Missile( vec3 initPosition, vec3 initVelocity, vec3 target, vec3 _colour ) {
     pos0 = initPosition;
     pos1 = initPosition;
     velocity = initVelocity;
     colour = _colour;
-    destY = stopAtY;
+    destY = target.y;
+    destX = target.x;
     currentTime = 0;
+    for (int i = 0; i < MISSILE_TRAIL_LIMIT; i++)
+    {
+        trailPoints.add(pos0);
+    }
   }
 
   // Draw the missile and its trail
@@ -35,12 +41,22 @@ class Missile {
 
     const int numPts = 2;
 
+    trailPoints.remove(0);
+    trailPoints.add(pos1);
+
     vec3 points[  numPts ] = { pos0,   pos1 };
     vec3 colours[ numPts ] = { colour, colour };
+    vec3 trail[MISSILE_TRAIL_LIMIT];
+    vec3 trailcolour[MISSILE_TRAIL_LIMIT];
+    
+    for (int i = 0; i < MISSILE_TRAIL_LIMIT && i < trailPoints.size(); i++) {
+        trail[i] = trailPoints[i]; // Copy each element from seq
+        trailcolour[i] = colour;
+    }
 
     mat4 M = worldToScreen;
     
-    drawSegs( gpu, GL_LINES, points, colours, numPts, M );
+    drawSegs( gpu, GL_LINE_STRIP, trail, trailcolour, MISSILE_TRAIL_LIMIT, M );
 
     // define missile shape
     const int missilePts = 5;
@@ -74,7 +90,7 @@ class Missile {
     };
 
     vec3 xAxis = vec3(0, 1, 0);
-    vec3 direction = pos1 - pos0;
+    vec3 direction = trailPoints[29] - trailPoints[28];
 
     // We convert to screen coords last, we need to scale, rotate, and translate it first
     mat4 M2 = worldToScreen * translate(pos1) * rotate(xAxis, direction) * scale(MISSILE_SCALE, MISSILE_SCALE, MISSILE_SCALE);
@@ -112,20 +128,26 @@ class Missile {
     // YOUR CODE HERE (Step 3)
     // something with checking it's current position versus something else
 
-    // if the missle is going downwards (dir is negative)
-    // check if the current y coord is greater than the destY, other we've hit it
+      bool flag = false;
+
+      // If we hit the boundary, return true automatically
       if (pos1.y < 0 || pos1.x > 1 || pos1.x < 0)
           return true;
       else if (velocity.y < 0)
       {
-          return (pos1.y <= destY);
+          flag = (pos1.y <= destY);
       }
       else if (velocity.y > 0)
       {
-          return (pos1.y >= destY);
+          flag = (pos1.y >= destY);
       }
+      
+      if (velocity.x > 0) // if missile is going left
+          flag = (pos1.x >= destX);
+      else if (velocity.x < 0) // if missile is going right
+          flag = (pos1.x <= destX);
 
-    return false;
+    return flag;
   }
 
  private:
@@ -135,7 +157,9 @@ class Missile {
   vec3 velocity;   // velocity
   vec3 colour;     // colour of missile trail
   float destY;     // y position at destination
+  float destX;     // x position at destination
   float currentTime; // Used for velocity calculations
+  seq<vec3> trailPoints; // track the trajectory of the missile
 };
 
 

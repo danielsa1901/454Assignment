@@ -160,7 +160,7 @@ void World::updateState( float deltaT )
       vec3 direction = vec3(target - startPos).normalize();
       vec3 colour = vec3(255, 255, 0);
 
-      missilesIn.add(Missile(startPos, INIT_INCOMING_MISSILE_SPEED * direction, target.y, colour));
+      missilesIn.add(Missile(startPos, INIT_INCOMING_MISSILE_SPEED * direction, target, colour));
   }
 
   // Look for terminating missiles
@@ -187,11 +187,24 @@ void World::updateState( float deltaT )
 
   // Look for terminating explosions
 
-  for (int i=0; i<explosions.size(); i++)
-    if (explosions[i].radius() >= explosions[i].maxRadius()) {
-      explosions.remove(i);
-      i--;
-    }
+  for (int i = 0; i < explosions.size(); i++) {
+      if (explosions[i].radius() >= explosions[i].maxRadius()) {
+          explosions.remove(i);
+          i--;
+      }
+      else if (explosions[i].radius() >= explosions[i].maxRadius() * 0.75) {
+          explosions[i].setColour(vec3(255, 0, 0));
+      }
+      else if (explosions[i].radius() >= explosions[i].maxRadius() * 0.5) {
+          explosions[i].setColour(vec3(255, 165, 0));
+      }
+      else if (explosions[i].radius() >= explosions[i].maxRadius() * 0.25) {
+          explosions[i].setColour(vec3(255, 255, 0));
+      }
+      else {
+          explosions[i].setColour(vec3(255, 255, 255));
+      }
+  }
 
   // Update all the moving objects
 
@@ -273,7 +286,7 @@ void World::fireMissile( int siloIndex, vec3 worldMousePos )
         vec3 missleColour = vec3(1, 0, 0);
 
         // Draw the missle
-        missilesOut.add(Missile(siloPos, INIT_OUTGOING_MISSILE_SPEED * direction, worldMousePos.y, missleColour));
+        missilesOut.add(Missile(siloPos, INIT_OUTGOING_MISSILE_SPEED * direction, worldMousePos, missleColour));
 
         // Decrement the missile count from the given silo
         silos[siloIndex].decrMissiles();
