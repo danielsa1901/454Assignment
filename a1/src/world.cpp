@@ -72,7 +72,7 @@ void World::handleKeystroke( int key, float x, float y )
 {
   // YOUR CODE HERE (Step 1)
   // From the main file (mc.cpp), they already get converted to 'Screen coords' before being passed to us
-  // Use the inverse matrix function from the linalg library and apply it to
+  // Use the inverse matrix function from the linalg library and apply it to the 'worldToScreen' matrix, and then apply it to the mouse position vector
   vec4 mousePosVec4 = vec4(x, y, 0, 1);
   mousePosVec4 = worldToScreen.inverse() * mousePosVec4;
   vec3 worldMousePos = vec3(mousePosVec4.x, mousePosVec4.y, mousePosVec4.z);
@@ -144,23 +144,24 @@ void World::updateState( float deltaT )
   if (probability > 1.0f)
       probability = 1.0f;
 
-  // generate a rand number between 0 and 1
+  // generate a random number between 0 and 1
   float randomValue = static_cast<float>(std::rand()) / RAND_MAX;
 
+  // fire an imcoming missile if the random number is greater than the calculated probability
   bool fireIncoming = randomValue <= probability;
 
-  // make a new random number for the missle starting x position
-  // we need a different rand number or else all the incoming missle positions
-  // will be gated by the probability number
   if (fireIncoming)
   {
+      // make a new random number for the missle's starting x position
+      // we need a different rand number or else all the incoming missle positions
+      // will be gated by the probability number
       vec3 startPos = vec3(static_cast<float>(std::rand()) / RAND_MAX, worldTop, 0);
       vec3 target = vec3(static_cast<float>(std::rand()) / RAND_MAX, 0, 0);
 
+      // normalize the direction vector, to be scaled
       vec3 direction = vec3(target - startPos).normalize();
-      vec3 colour = vec3(255, 255, 0);
 
-      missilesIn.add(Missile(startPos, INIT_INCOMING_MISSILE_SPEED * direction, target, colour));
+      missilesIn.add(Missile(startPos, INIT_INCOMING_MISSILE_SPEED * direction, target, INCOMING_MISSLE_COLOUR));
   }
 
   // Look for terminating missiles
@@ -168,24 +169,25 @@ void World::updateState( float deltaT )
   for (int i=0; i<missilesIn.size(); i++)
     if (missilesIn[i].hasReachedDestination()) {
       // YOUR CODE HERE (Step 5b)
-      vec3 colour = vec3(255, 255, 0);
-      explosions.add(Circle(missilesIn[i].position(), EXPLOSION_SPEED, EXPLOSION_RADIUS, colour, false));
-      //draw a circle where the missle current is
-      // remove missile that hit target
+      // add a new circle object to the explosion seq
+      explosions.add(Circle(missilesIn[i].position(), EXPLOSION_SPEED, EXPLOSION_RADIUS, INCOMING_MISSLE_COLOUR, false));
+      // remove missile that is now exploding
       missilesIn.remove(i);
     }
 
   for (int i=0; i<missilesOut.size(); i++)
     if (missilesOut[i].hasReachedDestination()) {
       // YOUR CODE HERE (Step 5b)
-      vec3 colour = vec3(1, 0, 0);
-      explosions.add(Circle(missilesOut[i].position(), EXPLOSION_SPEED, EXPLOSION_RADIUS, colour, true));
-      //draw a circle where the missle current is
-      // remove missile that hit target
+      // add a new circle object to the explosion seq
+      explosions.add(Circle(missilesOut[i].position(), EXPLOSION_SPEED, EXPLOSION_RADIUS, OUTGOING_MISSILE_COLOUR, true));
+      // remove missile that is now exploding
       missilesOut.remove(i);
     }
 
   // Look for terminating explosions
+  // Half of a novel feature
+  // This will change the colour of the explosion from white to yellow to orange to red based on its size.
+  // And will delete the explosion once exceeding the max radius.
 
   for (int i = 0; i < explosions.size(); i++) {
       if (explosions[i].radius() >= explosions[i].maxRadius()) {
@@ -243,14 +245,14 @@ void World::updateState( float deltaT )
 	  }
   }
 
-  // Check for outgoing missiles that have exploded and intersect an
-  // incoming missile
-
   // YOUR CODE HERE (Step 5d)
+  // Check for outgoing missiles that have exploded and intersects an incoming missile
+  // Check is the difference between the two missile is less than the explosion radius
   for (int i=0; i<explosions.size(); i++) 
     if (explosions[i].isOutgoingMissile()) {
 		for (int j = 0; j < missilesIn.size(); j++) {
 			if ((explosions[i].position() - missilesIn[j].position()).length() <= EXPLOSION_RADIUS) {
+                // remove missile object from seq
 				missilesIn.remove(j);
 			}
 		}
@@ -272,21 +274,21 @@ void World::fireMissile( int siloIndex, vec3 worldMousePos )
 {
   // YOUR CODE HERE (Step 2)
   // Create a missle based open the siloindex (where it's being fired from, 0->Left, 1->Middle, 2->Right), and the Mouse position (where the missile is going)
-  // Find the position of the silo
 
+    // check if the given silo is eligible to fire a missile
     if (silos[siloIndex].canShoot())
     {
+        // Find silo position, which is where the missile is fired from
         vec3 siloPos = silos[siloIndex].position();
 
         // Find the direction of the missile
         vec3 direction = worldMousePos - siloPos;
 
+        // make the direction unit length, which we can then scale
         direction = direction.normalize();
 
-        vec3 missleColour = vec3(1, 0, 0);
-
         // Draw the missle
-        missilesOut.add(Missile(siloPos, INIT_OUTGOING_MISSILE_SPEED * direction, worldMousePos, missleColour));
+        missilesOut.add(Missile(siloPos, INIT_OUTGOING_MISSILE_SPEED * direction, worldMousePos, OUTGOING_MISSILE_COLOUR));
 
         // Decrement the missile count from the given silo
         silos[siloIndex].decrMissiles();

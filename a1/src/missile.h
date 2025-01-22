@@ -29,6 +29,8 @@ class Missile {
     destY = target.y;
     destX = target.x;
     currentTime = 0;
+
+    // fill the trail point seq with the starting position
     for (int i = 0; i < MISSILE_TRAIL_LIMIT; i++)
     {
         trailPoints.add(pos0);
@@ -39,19 +41,16 @@ class Missile {
 
   void draw( GPUProgram *gpu, mat4 &worldToScreen ) {
 
-    const int numPts = 2;
-
+    // remove oldest point, add current position to seq
     trailPoints.remove(0);
     trailPoints.add(pos1);
 
-    vec3 points[  numPts ] = { pos0,   pos1 };
-    vec3 colours[ numPts ] = { colour, colour };
     vec3 trail[MISSILE_TRAIL_LIMIT];
     vec3 trailcolour[MISSILE_TRAIL_LIMIT];
     
     for (int i = 0; i < MISSILE_TRAIL_LIMIT && i < trailPoints.size(); i++) {
-        trail[i] = trailPoints[i]; // Copy each element from seq
-        trailcolour[i] = colour;
+        trail[i] = trailPoints[i]; // Copy each element from seq to the point array
+        trailcolour[i] = colour;   // each point will have the same colour
     }
 
     mat4 M = worldToScreen;
@@ -74,9 +73,10 @@ class Missile {
     vec3 missileTriangles[shapePoints] = {
         missilePoints[0], missilePoints[1], missilePoints[2], // Triangle 1: bottom left, bottom right, top left
         missilePoints[2], missilePoints[1], missilePoints[3], // Triangle 2: top left, bottom right, top right
-        missilePoints[2], missilePoints[3], missilePoints[4], // Triangle 1: top left, top right, triangle top
+        missilePoints[2], missilePoints[3], missilePoints[4], // Triangle 3: top left, top right, triangle top
     };
 
+    // every point in the missile will have to same colour (solid red or yellow)
     vec3 missileColours[shapePoints] = {
         colour,
         colour,
@@ -89,12 +89,14 @@ class Missile {
         colour
     };
 
+    // find angle between y axis (where the missile is original built relative to) and the vector from the last two positions
     vec3 xAxis = vec3(0, 1, 0);
-    vec3 direction = trailPoints[29] - trailPoints[28];
+    vec3 direction = trailPoints[MISSILE_TRAIL_LIMIT-1] - trailPoints[MISSILE_TRAIL_LIMIT-2];
 
     // We convert to screen coords last, we need to scale, rotate, and translate it first
     mat4 M2 = worldToScreen * translate(pos1) * rotate(xAxis, direction) * scale(MISSILE_SCALE, MISSILE_SCALE, MISSILE_SCALE);
 
+    // draw the missile
     drawSegs(gpu, GL_TRIANGLES, missileTriangles, missileColours, 9, M2);
   }
 
@@ -104,9 +106,11 @@ class Missile {
     pos1 = pos1 + deltaT * velocity;
 
     // YOUR CODE HERE (Step 6)
+    // track time for parabolic curve
     currentTime += deltaT;
 
     if (this->colour == OUTGOING_MISSILE_COLOUR)
+        // apply gravity to outgoing missiles that increases with time
         pos1 = pos1 + currentTime * currentTime * 0.5 * (vec3(0, -0.005, 0));
     else if (this->colour == INCOMING_MISSLE_COLOUR) {
         // significantly reduce the gravity effect for incoming missiles to prevent them from reaching too high of a speed
@@ -128,20 +132,20 @@ class Missile {
     // YOUR CODE HERE (Step 3)
     // something with checking it's current position versus something else
 
+      // use a flag so that we check both the destY and the destX conditions
       bool flag = false;
 
-      // If we hit the boundary, return true automatically
+      // If we hit the x boundary, or below y = 0, return true automatically
       if (pos1.y < 0 || pos1.x > 1 || pos1.x < 0)
           return true;
-      else if (velocity.y < 0)
-      {
+
+      // check where we are relative to the y destination
+      else if (velocity.y < 0) // if missile is going downwards
           flag = (pos1.y <= destY);
-      }
-      else if (velocity.y > 0)
-      {
+      else if (velocity.y > 0) // if missile is going upwards
           flag = (pos1.y >= destY);
-      }
       
+      // also check where we are relative to the x destination, as due to gravity, we may never hit the y location
       if (velocity.x > 0) // if missile is going left
           flag = (pos1.x >= destX);
       else if (velocity.x < 0) // if missile is going right

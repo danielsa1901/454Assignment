@@ -63,10 +63,12 @@ class Silo {
 
     for (int i=0; i<NUM_SEMICIRCLE_PTS; i++) {
       float theta = i * M_PI / (float) NUM_SEMICIRCLE_PTS;
+      // when defining points, don't apply scaling or translation yet
       points[i]  = vec3( cos(theta), sin(theta), 0 );
       colours[i] = colour;
     }
 
+    // scale to correct size, then translate to correct position (offload to GPU)
     mat4 M = worldToScreen * translate( pos) * scale (SILO_RADIUS, SILO_RADIUS, SILO_RADIUS);
     
     drawSegs( gpu, GL_LINE_LOOP, points, colours, NUM_SEMICIRCLE_PTS, M );

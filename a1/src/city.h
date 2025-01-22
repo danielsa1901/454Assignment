@@ -32,6 +32,7 @@ class City {
     
     const int numPts = 4;
 
+    // when defining points, don't apply scaling or translation yet
     vec3 points[numPts] = {
       vec3(1, 0, 0), // Relative coordinates (scaled by CITY_WIDTH and CITY_HEIGHT)
       vec3(1, 1, 0),
@@ -45,6 +46,7 @@ class City {
       vec3(1,1,1),
       vec3(1,1,1) };
 
+    // scale to correct size, then translate to correct position (offload to GPU)
     mat4 M = worldToScreen * translate(pos) * scale(CITY_WIDTH, CITY_HEIGHT, 1);
     
     drawSegs( gpu, GL_LINE_LOOP, points, colours, numPts, M );
